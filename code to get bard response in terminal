@@ -1,0 +1,86 @@
+Here is another task in this task we were bound to make a function for parsing purpose and make a class that handle Singleton pattern.
+Here is the code that is write:
+# simple code to get response of bard in our terminal
+from bardapi import Bard
+
+api_key = "YAisNK8snD2F-uJIX7LEpXTIvC1QlaWU1V--UyZAj-PVqMHRXvpAPv1qUHaJkCrlMaV5wA."
+token = api_key
+bard = Bard(token=token)
+
+response = bard.get_answer("how to make epc to bpmn converter?")
+print(response['content'])
+
+
+# with adding function
+from bardapi import Bard
+
+def get_bard_response(question):
+    api_key = "YAisNK8snD2F-uJIX7LEpXTIvC1QlaWU1V--UyZAj-PVqMHRXvpAPv1qUHaJkCrlMaV5wA."
+    token = api_key
+    bard = Bard(token=token)
+    response = bard.get_answer(question)
+    return response['content']
+
+question = "how to make epc to bpmn converter?"
+response = get_bard_response(question)
+print(response)
+
+
+# with just adding class
+from bardapi import Bard
+
+class BardAPI:
+    def __init__(self, token):
+        self.bard = Bard(token=token)
+
+    def get_response(self, question):
+        response = self.bard.get_answer(question)
+        return response['content']
+
+api_key = "YAisNK8snD2F-uJIX7LEpXTIvC1QlaWU1V--UyZAj-PVqMHRXvpAPv1qUHaJkCrlMaV5wA."
+token = api_key
+
+bard_api = BardAPI(token)
+question = "how to make epc to bpmn converter?"
+response = bard_api.get_response(question)
+print(response)
+
+
+
+# arranging class in Singleton Pattern
+from bardapi import Bard
+
+class Singleton:
+    _instance = None
+
+    def __new__(cls, token):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        cls._instance.bard = Bard(token=token)
+        return cls._instance
+
+    def request_bard(self, question):
+        response = self.bard.get_answer(question)
+        return response['content']
+
+api_key = "YAisNK8snD2F-uJIX7LEpXTIvC1QlaWU1V--UyZAj-PVqMHRXvpAPv1qUHaJkCrlMaV5wA."
+token = api_key
+
+bard_api = Singleton(token)
+question = "what is bard?"
+response = bard_api.request_bard(question)
+print(response)
+
+
+
+In our output we got response of bard in our terminal and the concept of Singleton was to create only one object.
+
+
+
+
+
+
+
+
+
+
