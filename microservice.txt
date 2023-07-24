@@ -1,0 +1,49 @@
+
+# employee record microservie
+import json
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:@localhost/result"
+db = SQLAlchemy(app)
+
+# Define the model for the 'rough' table
+class Rough(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  
+    name = db.Column(db.String(100), nullable=False)
+    position = db.Column(db.String(100), nullable=False)
+    department = db.Column(db.String(100), nullable=False)
+    salary = db.Column(db.Integer, nullable=False)
+    
+
+#to store data in database using json file
+def store_data(new):
+    with open(new) as json_file:
+        data = json.load(json_file)
+
+    for record_data in data:
+        record = Rough(**record_data)
+        db.session.add(record)
+
+    db.session.commit()
+
+# @app.route('/', methods=['GET', 'POST'])
+# def sign():
+#     return 'Hello itx Laiba'
+
+
+#to fetch data from database
+@app.route('/', methods=['GET'])
+def get_records():
+    records = Rough.query.all()
+    result = [{'id': record.id, 'name': record.name, 'position': record.position, 'department':record.department, 'salary':record.salary} for record in records]
+    return jsonify(result), 200
+
+if __name__ == '__main__':
+    # db.create_all()  # Create the database table based on the model
+    with app.app_context():
+        store_data('new.json') 
+    app.run(debug=True)
+
+
